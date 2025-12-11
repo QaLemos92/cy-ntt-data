@@ -29,4 +29,13 @@ describe("Fluxo de Usuário via API", () => {
         });
       });
   });
+
+  it('Buscar quantidade de usuários existente', () => {
+    usuarioApi.listaUsuarios().then((response) => {
+      expect(response.status).to.eq(200);
+      const quantidadeUsuarios = response.body.usuarios.length;
+      cy.log(`Quantidade de usuários existentes: ${quantidadeUsuarios}`);
+    });
+    
+  });
 });
