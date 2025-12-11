@@ -12,6 +12,11 @@ class LoginPage {
         cy.visit('/login');
     }
 
+    validarPaginaDeLogin() {
+        cy.url().should('include', '/login');
+        this.elementos.botao_entrar().should('be.visible');
+    }
+
     prencherEmail(email) {
         this.elementos.campo_email().type(email);
     }

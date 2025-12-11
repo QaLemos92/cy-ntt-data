@@ -1,8 +1,10 @@
 import LoginPage from '../../pages/LoginPage';
 import CadastroPage from '../../pages/CadastroPage';
+import HomePage from '../../pages/HomePage';
 
 const loginPage = new LoginPage();
 const cadastroPage = new CadastroPage();
+const homePage = new HomePage();
 
 describe('Pagina de login', () => {
     beforeEach(() => {
@@ -40,4 +42,13 @@ describe('Pagina de login', () => {
         loginPage.prencherSenha('123456');
         loginPage.clicarEntrar();
     });
+
+    it('Deve deslogar usuário logado', () => {
+        cy.cadastroValido();
+        cy.login('eduardo.anemolos@outlook.com','123456');
+        homePage.validarPaginaProdutos();
+        homePage.deslogarUsuario();
+        loginPage.validarPaginaDeLogin();
+    });
+
 })
