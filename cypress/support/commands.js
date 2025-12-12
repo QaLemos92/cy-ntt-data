@@ -1,8 +1,8 @@
-Cypress.Commands.add("cadastroValido", () => {
+Cypress.Commands.add("cadastroValido", (nome, email, senha) => {
   cy.get('[data-testid="cadastrar"]').click();
-  cy.get("#nome").type("Eduardo Lemos");
-  cy.get("#email").type("eduardo.anemolos@outlook.com");
-  cy.get("#password").type("123456");
+  cy.get("#nome").type(nome || "Eduardo Lemos");
+  cy.get("#email").type(email || "eduardo.anemolos@outlook.com");
+  cy.get("#password").type(senha || "123456");
   cy.get('[data-testid="cadastrar"]').click();
   cy.visit("/login");
 });

@@ -1,6 +1,7 @@
 import produtosApi from "../../support/api/produtosApi";
 
 describe("Fluxo de Produtos", () => {
+  
   beforeEach(() => {
     cy.loginApi("fulano@qa.com", "teste");
   });
@@ -12,7 +13,7 @@ describe("Fluxo de Produtos", () => {
     });
   });
 
-  it.only("Deve criar e deletar um produto", () => {
+  it("Deve criar e deletar um produto", () => {
     const novoProduto = {
       nome: "produto teste " + Math.floor(Math.random() * 1000),
       preco: 55,

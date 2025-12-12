@@ -44,7 +44,6 @@ describe('Pagina de login', () => {
     });
 
     it('Deve deslogar usuário logado', () => {
-        cy.cadastroValido();
         cy.login('eduardo.anemolos@outlook.com','123456');
         homePage.validarPaginaProdutos();
         homePage.deslogarUsuario();
