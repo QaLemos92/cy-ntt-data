@@ -1,3 +1,5 @@
+import { should } from "chai";
+
 class DetalhesDeProdutos {
 
     elementos = {
@@ -13,7 +15,7 @@ class DetalhesDeProdutos {
     }
 
     adicionarItemAoCarrinho() {
-        this.elementos.botao_adicionarCarrinho().click();
+        this.elementos.botao_adicionarCarrinho().should('be', 'visible').click();
     }
 
     voltarParaPaginaDeProdutos() {

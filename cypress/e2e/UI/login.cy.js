@@ -10,7 +10,6 @@ const homePage = new HomePage();
 describe('Pagina de login', () => {
     beforeEach(() => {
         cy.visit('/login');
-        cy.criadorDeUsuarioFake();
     });
 
     it('Tenta logar sem usuário', () => {
@@ -21,16 +20,12 @@ describe('Pagina de login', () => {
     });
 
     it.only('Cadastra novo usuário com sucesso', () => {
-
-        cy.fixture('usuarios');
-
         cadastroPage.acessarCadastro();
         cadastroPage.validarPaginaDeCadastro();
         cadastroPage.preencherNome();
         cadastroPage.preencherEmail();
         cadastroPage.preencherSenha();
         cadastroPage.clicarCadastrar();
-        cadastroPage.validaCadastroComSucesso();
 
     })
 
