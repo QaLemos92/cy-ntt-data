@@ -26,7 +26,7 @@ class LoginPage {
     }
 
     clicarEntrar() {
-        this.elementos.botao_entrar().click();
+        this.elementos.botao_entrar().should('be', 'visible').click();
     }
 
     clicarCadastrar() {
@@ -35,6 +35,12 @@ class LoginPage {
 
     verificarAlerta(mensagem) {
         this.elementos.alert().should('contain', mensagem);
+    }
+
+    login(email, senha) {
+        this.prencherEmail(email);
+        this.prencherSenha(senha);
+        this.clicarEntrar();
     }
 }
 
