@@ -1,6 +1,7 @@
-import LoginPage from '../../pages/LoginPage';
-import CadastroPage from '../../pages/CadastroPage';
-import HomePage from '../../pages/HomePage';
+import LoginPage from '../../support/pages/LoginPage'
+import CadastroPage from '../../support/pages/CadastroPage';
+import HomePage from '../../support/pages/HomePage';
+
 
 const loginPage = new LoginPage();
 const cadastroPage = new CadastroPage();
@@ -9,6 +10,7 @@ const homePage = new HomePage();
 describe('Pagina de login', () => {
     beforeEach(() => {
         cy.visit('/login');
+        cy.criadorDeUsuarioFake();
     });
 
     it('Tenta logar sem usuário', () => {
@@ -18,22 +20,18 @@ describe('Pagina de login', () => {
         loginPage.verificarAlerta('Email e/ou senha inválidos');
     });
 
-    it('Cadastra novo usuário com sucesso', () => {
+    it.only('Cadastra novo usuário com sucesso', () => {
 
-        cy.intercept('POST', '/usuarios',{
-            statusCode: 201,
-            body: { message: 'Cadastro realizado com sucesso' }
-        }).as('cadastroSucesso');
+        cy.fixture('usuarios');
 
         cadastroPage.acessarCadastro();
         cadastroPage.validarPaginaDeCadastro();
-        cadastroPage.preencherNome('Eduardo Anemolos');
-        cadastroPage.preencherEmail('novo-email@hotmail.com');
-        cadastroPage.preencherSenha('senha123');
+        cadastroPage.preencherNome();
+        cadastroPage.preencherEmail();
+        cadastroPage.preencherSenha();
         cadastroPage.clicarCadastrar();
+        cadastroPage.validaCadastroComSucesso();
 
-        cy.wait('@cadastroSucesso').its('response.statusCode').should('eq', 201);
-        cadastroPage.validarMensagem('Cadastro realizado com sucesso');
     })
 
     it('Loga com usuário válido', () => {
