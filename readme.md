@@ -42,11 +42,15 @@ npm install
 ### 2. Abrir a interface do Cypress
 
 ```bash
-npx cypress open
+npm run test
 ```
 
 ### 3. Executar em modo headless
 
+
 ```bash
-npx cypress run
+npm run test:api
+```
+```bash
+npm run test:ui
 ```

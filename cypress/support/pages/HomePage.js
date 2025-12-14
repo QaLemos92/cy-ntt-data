@@ -46,10 +46,6 @@ class HomePage {
         .click();
     });
   }
-
-  deslogarUsuario() {
-    this.elementos.botao_deslogar().click();
-  }
 }
 
 export default HomePage;

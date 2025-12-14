@@ -2,7 +2,7 @@ class LoginPage {
 
     elementos = {
         campo_email: () => cy.get('[data-testid="email"]'),
-        campo_senha: () => cy.get('[data-testid="password"]'),
+        campo_senha: () => cy.get('[data-testid="senha"]'),
         botao_entrar: () => cy.get('[data-testid="entrar"]'),
         link_cadastrar: () => cy.get('[data-testid="cadastrar"]'),
         alert: () => cy.get('.alert'),
