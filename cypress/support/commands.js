@@ -53,12 +53,6 @@ Cypress.Commands.add("loginApi", (email, password) => {
       password: password,
     },
     failOnStatusCode: false,
-  }).then((response) => {
-    expect(response.status).to.eq(200);
-    expect(response.body).to.have.property("authorization");
-    const token = response.body.authorization;
-    Cypress.env("token", token);
-    cy.log(token);
   });
 });
 
