@@ -1,3 +1,5 @@
+import { criarUsuarioNormal } from "./utils/geradorUsuario";
+
 Cypress.Commands.add("cadastroValido", (nome, email, senha) => {
   cy.get('[data-testid="cadastrar"]').click();
   cy.get('[data-testid="nome"]').type(nome);
@@ -54,4 +56,5 @@ Cypress.Commands.add("loginApi", (email, password) => {
     Cypress.env("token", token);
     cy.log(token);
   });
+
 });

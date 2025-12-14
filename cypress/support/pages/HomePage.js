@@ -3,11 +3,9 @@ class HomePage {
     titulo: () => cy.get("h1"),
     campo_pesquisa: () => cy.get('[data-testid="pesquisar"]'),
     botao_pesquisar: () => cy.get('[data-testid="botaoPesquisar"]'),
-    lista_produtos: () =>
-      cy.get("#root > div > div > div.container-fluid > div > section .card"),
+    lista_produtos: () => cy.get("#root > div > div > div.container-fluid > div > section .card"),
     botao_adicionarLista: () => cy.get('[data-testid="adicionarNaLista"]'),
     link_detalhesProduto: () => cy.get('[data-testid="product-detail-link"]'),
-    botao_deslogar: () => cy.get('[data-testid="logout"]'),
   };
 
   validarPaginaProdutos() {

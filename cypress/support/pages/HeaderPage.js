@@ -11,7 +11,7 @@ class HeaderPage  {
     }
 
     acessaCarrinho(){
-        this.elementos.logout().click()
+        this.elementos.carrinho().click()
     }
 
     acessaListaDeCompras() {

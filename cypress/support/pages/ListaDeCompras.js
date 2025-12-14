@@ -32,13 +32,13 @@ class ListaDeCompras {
         const desejado = Number(quantidadeDesejada)
 
         if(atual < desejado) {
-            const clicks = desejado - atual
+            const clicks = (desejado - 1) - atual
             Cypress._.times(clicks, () => {
                 this.elementos.aumentar_quantidade().click()
             })
         }
 
-        if(atual > desejado) {
+        if (atual > desejado){
             const clicks = desejado - atual
             Cypress._.times(clicks, () => {
                 this.elementos.diminuir_quantidade().click()
