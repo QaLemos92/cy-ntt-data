@@ -1,5 +1,3 @@
-import { criarUsuarioNormal } from "./utils/geradorUsuario";
-
 Cypress.Commands.add("cadastroValido", (nome, email, senha) => {
   cy.get('[data-testid="cadastrar"]').click();
   cy.get('[data-testid="nome"]').type(nome);
@@ -27,7 +25,7 @@ Cypress.Commands.add("login", (email, senha) => {
   });
 });
 
-Cypress.Commands.add("loginOuCadastra", (nome, email, senha) => {
+Cypress.Commands.add("loginOuCadastra", (email, senha) => {
   cy.login(email, senha).then((response) => {
     if (response === "sucesso") {
       return;
@@ -38,6 +36,12 @@ Cypress.Commands.add("loginOuCadastra", (nome, email, senha) => {
       cy.login(email, senha);
     }
   });
+});
+
+Cypress.Commands.add("loginAdmin", (email, senha) => {
+  cy.get('[data-testid="email"]').type(email);
+  cy.get('[data-testid="senha"]').type(senha);
+  cy.get('[data-testid="entrar"]').click();
 });
 
 Cypress.Commands.add("loginApi", (email, password) => {
@@ -56,5 +60,20 @@ Cypress.Commands.add("loginApi", (email, password) => {
     Cypress.env("token", token);
     cy.log(token);
   });
+});
 
+Cypress.Commands.add("cadastroApiAdmin", (nome, email, password) => {
+  cy.request({
+    method: "POST",
+    url: `${Cypress.env("baseApiUrl")}/usuarios`,
+    body: {
+      nome: nome,
+      email: email,
+      password: password,
+      administrador: "true",
+    },
+    failOnStatusCode: false,
+  }).then((response) => {
+    expect(response.status).to.eq(201);
+  });
 });

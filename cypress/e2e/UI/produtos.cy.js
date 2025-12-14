@@ -5,6 +5,7 @@ import { criarUsuarioNormal } from "../../support/utils/geradorUsuario";
 import ListaDeCompras from "../../support/pages/ListaDeCompras";
 import HeaderPage from "../../support/pages/HeaderPage"
 
+
 const detalhesDeProdutos = new DetalhesDeProdutos();
 const loginPage = new LoginPage();
 const homePage = new HomePage();
@@ -48,7 +49,6 @@ describe("Página de Produtos", () => {
     listaDeCompras.ajustarQuantidade(8);
     listaDeCompras.adicionaItemAoCarrinho();
     header.acessaCarrinho();
-    header.realizaLogout();
-        
+    header.realizaLogout();        
   });
 });

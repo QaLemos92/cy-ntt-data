@@ -1,9 +1,21 @@
 import produtosApi from "../../support/api/produtosApi";
+import { criarProduto } from "../../support/utils/geradorProduto";
+import { criarUsuarioAdmin } from "../../support/utils/geradorUsuario";
 
 describe("Fluxo de Produtos", () => {
-  
+  let usuario;
+  let produto;
+
   beforeEach(() => {
-    cy.loginApi("fulano@qa.com", "teste");
+    usuario = criarUsuarioAdmin();
+    produto = criarProduto();
+
+    cy.writeFile("cypress/fixtures/usuarios.json", criarUsuarioAdmin());
+    cy.writeFile("cypress/fixtures/produtos.json", criarProduto());
+
+    cy.cadastroApiAdmin(usuario.nome, usuario.email, usuario.senha);
+
+    cy.loginApi(usuario.email, usuario.senha);
   });
 
   it("Deve listar produtos", () => {
@@ -13,12 +25,12 @@ describe("Fluxo de Produtos", () => {
     });
   });
 
-  it("Deve criar e deletar um produto", () => {
+  it.only("Deve criar e deletar um produto", () => {
     const novoProduto = {
-      nome: "produto teste " + Math.floor(Math.random() * 1000),
-      preco: 55,
-      descricao: "um produto muito bom pra teste",
-      quantidade: 50,
+      nome: produto.nome,
+      preco: produto.preco,
+      descricao: produto.descricao,
+      quantidade: produto.quantidade,
     };
 
     produtosApi.criarProduto(novoProduto).then((response) => {

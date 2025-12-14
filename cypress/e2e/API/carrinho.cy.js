@@ -1,8 +1,6 @@
 import produtosApi from "../../support/api/produtosApi";
 import carrinhoApi from "../../support/api/carrinhoApi";
 
-import cadastroApi from "../../support/api/cadastroApi";
-
 describe("API - Carrinho de Compras", () => {
 
   beforeEach(() => {

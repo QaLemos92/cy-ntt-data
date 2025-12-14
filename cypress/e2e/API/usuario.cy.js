@@ -1,32 +1,34 @@
 import loginApi from "../../support/api/loginApi";
 import usuarioApi from "../../support/api/usuariosApi";
+import { criarUsuarioAdmin } from "../../support/utils/geradorUsuario";
 
 describe("Fluxo de Usuário via API", () => {
-  it("Criar usuario, logar e deletar", () => {
-    const email = `usuario${Date.now()}@teste.com`;
+  beforeEach(() => {
+    cy.writeFile("cypress/fixtures/usuarios.json", criarUsuarioAdmin());
+  });
 
-    //Criando usuário
-    usuarioApi
-      .criarUsuario({
-        nome: "Eduardo Teste",
-        email: email,
-        password: "senha1",
-        administrador: "false",
-      })
-      .then((response) => {
-        expect(response.status).to.eq(201);
-        const usuarioId = response.body._id;
-
-        //Logando com o usuário criado
-        loginApi.login(email, "senha1").then((response) => {
-          expect(response.status).to.eq(200);
-          expect(response.body.authorization).to.exist;
-
-          //Deletando o usuário criado
-          usuarioApi.deletarUsuario(usuarioId).then((response) => {
-            expect(response.status).to.eq(200);
-          });
+  it("Deve criar usuario com sucesso e impedir outro cadastro com mesmo e-mail", () => {
+    cy.fixture("usuarios").then((usuario) => {
+      usuarioApi
+        .criarUsuario({
+          nome: usuario.nome,
+          email: usuario.email,
+          password: usuario.senha,
+          administrador: usuario.administrador,
+        })
+        .then((response) => {
+          expect(response.status).to.eq(201);
         });
-      });
+      usuarioApi.criarUsuario({
+          nome: usuario.nome,
+          email: usuario.email,
+          password: usuario.senha,
+          administrador: usuario.administrador,
+        })
+        .then((response) => {
+          expect(response.status).to.eq(400);
+          expect(response.body.message).to.eq("Este email já está sendo usado");
+        });
+    });
   });
 });

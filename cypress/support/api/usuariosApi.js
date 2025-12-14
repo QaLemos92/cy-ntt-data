@@ -1,7 +1,12 @@
 class UsuariosApi {
 
     criarUsuario(dadosUsuario) {
-        return cy.request('POST',`${Cypress.env('baseApiUrl')}/usuarios`, dadosUsuario);
+        return cy.request({
+            method:'POST',
+            url:`${Cypress.env('baseApiUrl')}/usuarios`,
+            body: dadosUsuario,
+            failOnStatusCode: false
+        });
     }
 
     listaUsuarios() {
