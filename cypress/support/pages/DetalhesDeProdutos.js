@@ -1,32 +1,30 @@
-import { should } from "chai";
-
 class DetalhesDeProdutos {
+  elementos = {
+    titulo: () => cy.get("h1"),
+    botao_adicionarCarrinho: () => cy.get('[data-testid="product-detail-link"]'),
+    link_voltarProdutos: () => cy.get('[data-testid="voltarHome"]'),
+    texto_detalhes: () => cy.get(".especificacoes"),
+  };
 
-    elementos = {
-        titulo: () => cy.get('h1'),
-        botao_adicionarCarrinho: () => cy.get('[data-testid="product-detail-link"]'),
-        link_voltarProdutos: () => cy.get('[data-testid="voltarHome"]'),
-        texto_detalhes: () => cy.get('.especificacoes')
-    }
+  validarPaginaDetalhesDoProduto() {
+    cy.url().should("include", "/detalhesProduto");
+    this.elementos.titulo().should("have.text", "Detalhes do produto");
+  }
 
-    validarPaginaDetalhesDoProduto() {
-        cy.url().should('include', '/detalhesProduto');
-        this.elementos.titulo().should('have.text', 'Detalhes do produto');
-    }
+  adicionarItemNaLista() {
+    this.elementos.botao_adicionarCarrinho().click();
+  }
 
-    adicionarItemAoCarrinho() {
-        this.elementos.botao_adicionarCarrinho().should('be', 'visible').click();
-    }
+  voltarParaPaginaDeProdutos() {
+    this.elementos.link_voltarProdutos().click();
+  }
 
-    voltarParaPaginaDeProdutos() {
-        this.elementos.link_voltarProdutos().click()
-    }
-
-    validarDetalhesDoProduto() {
-        this.elementos.texto_detalhes()
-        .should('exist')
-        .should('contain.text', 'Detalhes');
-    }
-}  
+  validarDetalhesDoProduto() {
+    this.elementos
+      .texto_detalhes()
+      .should("exist")
+      .should("contain.text", "Detalhes");
+  }
+}
 
 export default DetalhesDeProdutos;

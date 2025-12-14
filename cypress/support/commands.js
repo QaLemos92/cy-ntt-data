@@ -1,16 +1,15 @@
 Cypress.Commands.add("cadastroValido", (nome, email, senha) => {
   cy.get('[data-testid="cadastrar"]').click();
-  cy.get("#nome").type(nome || "Eduardo Lemos");
-  cy.get("#email").type(email || "eduardo.anemolos@outlook.com");
-  cy.get("#password").type(senha || "123456");
+  cy.get('[data-testid="nome"]').type(nome);
+  cy.get('[data-testid="email"]').type(email);
+  cy.get('[data-testid="password"]').type(senha);
   cy.get('[data-testid="cadastrar"]').click();
-  cy.visit("/login");
 });
 
-Cypress.Commands.add("login", (username, password) => {
+Cypress.Commands.add("login", (email, senha) => {
   cy.intercept("POST", "/login").as("requestLogin");
-  cy.get('[data-testid="email"]').type(username);
-  cy.get('[data-testid="senha"]').type(password);
+  cy.get('[data-testid="email"]').type(email);
+  cy.get('[data-testid="senha"]').type(senha);
   cy.get('[data-testid="entrar"]').click();
   cy.wait("@requestLogin").then((res) => {
     const body = res.response.body;
