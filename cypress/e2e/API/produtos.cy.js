@@ -28,6 +28,20 @@ describe("Fluxo de Produtos", () => {
     });
   });
 
+  it("Deve falhar busca de produto com parâmetro errado", () => {
+    produtosApi.listarProdutos({ preco: "abc" }).then((response) => {
+      expect(response.status).to.eq(400);
+      expect(response.body.preco).to.eq("preco deve ser um número");
+    });
+  });
+
+  it("Deve trazer lista vazia e não falhar", () => {
+    produtosApi.listarProdutos({ nome: usuario.nome }).then((response) => {
+      expect(response.status).to.eq(200);
+      expect(response.body.quantidade).to.eq(0);
+    });
+  });
+
   it("Deve criar e deletar um produto", () => {
     const novoProduto = {
       nome: produto.nome,
@@ -48,7 +62,7 @@ describe("Fluxo de Produtos", () => {
     });
   });
 
-  it.only("Deve impedir a criação de produto por usuario normal", () => {
+  it("Deve impedir a criação de produto por usuario normal", () => {
     const novoProduto = {
       nome: produto.nome,
       preco: produto.preco,
@@ -57,7 +71,7 @@ describe("Fluxo de Produtos", () => {
     };
 
     usuario = criarUsuarioNormal();
-    cy.cadastroApi(usuario.nome, usuario.email, usuario.senha, "false")
+    cy.cadastroApi(usuario.nome, usuario.email, usuario.senha, "false");
     produtosApi.criarProduto(novoProduto).then((response) => {
       expect(response.status).to.eq(401);
     });
