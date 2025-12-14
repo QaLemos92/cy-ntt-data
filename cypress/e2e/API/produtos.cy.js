@@ -16,7 +16,7 @@ describe("Fluxo de Produtos", () => {
     cy.writeFile("cypress/fixtures/usuarios.json", criarUsuarioAdmin());
     cy.writeFile("cypress/fixtures/produtos.json", criarProduto());
 
-    cy.cadastroApiAdmin(usuario.nome, usuario.email, usuario.senha);
+    cy.cadastroApi(usuario.nome, usuario.email, usuario.senha);
 
     cy.loginApi(usuario.email, usuario.senha);
   });
@@ -48,20 +48,22 @@ describe("Fluxo de Produtos", () => {
     });
   });
 
-  it("Deve impedir a criação de produto por usuario normal", () => {
+  it.only("Deve impedir a criação de produto por usuario normal", () => {
     const novoProduto = {
       nome: produto.nome,
       preco: produto.preco,
       descricao: produto.descricao,
       quantidade: produto.quantidade,
     };
+
     usuario = criarUsuarioNormal();
+    cy.cadastroApi(usuario.nome, usuario.email, usuario.senha, "false")
     produtosApi.criarProduto(novoProduto).then((response) => {
       expect(response.status).to.eq(401);
     });
   });
 
-  it.only("Deve falhar criação por token inválido", () => {
+  it("Deve falhar criação por token inválido", () => {
     const novoProduto = {
       nome: produto.nome,
       preco: produto.preco,

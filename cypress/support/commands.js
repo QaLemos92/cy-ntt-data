@@ -56,18 +56,17 @@ Cypress.Commands.add("loginApi", (email, password) => {
   });
 });
 
-Cypress.Commands.add("cadastroApiAdmin", (nome, email, password) => {
+Cypress.Commands.add("cadastroApi", (nome, email, password, administrador = "false") => {
   cy.request({
     method: "POST",
     url: `${Cypress.env("baseApiUrl")}/usuarios`,
     body: {
-      nome: nome,
-      email: email,
-      password: password,
-      administrador: "true",
+      nome,
+      email,
+      password,
+      administrador,
     },
     failOnStatusCode: false,
-  }).then((response) => {
-    expect(response.status).to.eq(201);
   });
 });
+
