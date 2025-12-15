@@ -36,7 +36,7 @@ Os testes foram criados para validar funcionalidades do ambiente público **Serv
 - Validação da redução de estoque ao adicionar produtos ao carrinho.
 - Cancelamento de compra com reabastecimento do estoque.
 - Validação de acesso negado sem autenticação.
-- Validação de isolamento de carrinho entre usuários.
+- Validação de isolamento de carrinho entre usuários. (Este falha na segurança)
 ---
 
 ## Arquitetura e Boas Práticas
