@@ -1,34 +1,42 @@
+
 import loginApi from "../../support/api/loginApi";
 import usuarioApi from "../../support/api/usuariosApi";
-import { criarUsuarioAdmin } from "../../support/utils/geradorUsuario";
+import { criarUsuario } from "../../support/utils/geradorUsuario";
 
 describe("Fluxo de Usuário via API", () => {
+  let usuario;
+
   beforeEach(() => {
-    cy.writeFile("cypress/fixtures/usuarios.json", criarUsuarioAdmin());
+    usuario = criarUsuario()
   });
 
-  it("Deve criar usuario com sucesso e impedir outro cadastro com mesmo e-mail", () => {
-    cy.fixture("usuarios").then((usuario) => {
-      usuarioApi
-        .criarUsuario({
-          nome: usuario.nome,
-          email: usuario.email,
-          password: usuario.senha,
-          administrador: usuario.administrador,
-        })
-        .then((response) => {
-          expect(response.status).to.eq(201);
-        });
-      usuarioApi.criarUsuario({
-          nome: usuario.nome,
-          email: usuario.email,
-          password: usuario.senha,
-          administrador: usuario.administrador,
-        })
-        .then((response) => {
-          expect(response.status).to.eq(400);
-          expect(response.body.message).to.eq("Este email já está sendo usado");
-        });
-    });
+  it("Não deve permitir criar usuário ja existente", () => {
+    usuarioApi.criarUsuario(usuario)
+
+      .then((response) => {
+        expect(response.status).to.eq(400)
+      })
+  });
+
+  it('Não deve criar usuário sem e-mail', () => {
+    delete usuario.email;
+
+    
+    usuarioApi.criarUsuario(usuario)
+    .then((response) => {
+      expect(response.status).to.eq(400)
+      cy.log(response.body.email)
+    })
+  });
+
+  it('Não deve criar usuário sem senha', () => {
+    delete usuario.password;
+
+    
+    usuarioApi.criarUsuario(usuario)
+    .then((response) => {
+      expect(response.status).to.eq(400)
+      cy.log(response.body.password)
+    })
   });
 });

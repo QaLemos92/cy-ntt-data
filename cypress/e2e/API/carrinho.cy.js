@@ -7,6 +7,7 @@ describe("API - Carrinho de Compras", () => {
   let usuario;
   let estoqueInicial;
   let estoqueAlterado;
+  let carrinhoId
   let novoProduto;
   let produto_Id;
 
@@ -106,6 +107,7 @@ describe("API - Carrinho de Compras", () => {
       })
 
       // Aqui não deveria deixar deletar o carrinho: risco de segurança
+      cy.log("Risco de segurança")
       .then((response) => {
         expect(response.status).to.not.eq(200);
       })
