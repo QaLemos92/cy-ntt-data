@@ -5,5 +5,6 @@ export function criarUsuario() {
     nome: faker.person.fullName(),
     email: faker.internet.email(),
     senha: faker.internet.password(),
+    
   };
 }

@@ -1,8 +1,7 @@
 import produtosApi from "../../support/api/produtosApi";
 import { criarProduto } from "../../support/utils/geradorProduto";
 import {
-  criarUsuarioAdmin,
-  criarUsuarioNormal,
+  criarUsuario
 } from "../../support/utils/geradorUsuario";
 
 describe("Fluxo de Produtos", () => {
@@ -10,15 +9,20 @@ describe("Fluxo de Produtos", () => {
   let produto;
 
   beforeEach(() => {
-    usuario = criarUsuarioAdmin();
+    usuario = criarUsuario();
     produto = criarProduto();
 
-    cy.writeFile("cypress/fixtures/usuarios.json", criarUsuarioAdmin());
-    cy.writeFile("cypress/fixtures/produtos.json", criarProduto());
+    cy.cadastroApi(usuario.nome, usuario.email, usuario.senha, "true")
 
-    cy.cadastroApi(usuario.nome, usuario.email, usuario.senha);
+    .then(() => {
+      return cy.loginApi(usuario.email, usuario.senha);
+    })
 
-    cy.loginApi(usuario.email, usuario.senha);
+    .then((loginResponse) => {
+      Cypress.env("token", loginResponse.body.authorization)
+    })
+
+    
   });
 
   it("Deve listar produtos", () => {
@@ -42,7 +46,7 @@ describe("Fluxo de Produtos", () => {
     });
   });
 
-  it.only("Deve criar e deletar um produto", () => {
+  it("Deve criar e deletar um produto", () => {
     const novoProduto = {
       nome: produto.nome,
       preco: produto.preco,
@@ -70,11 +74,23 @@ describe("Fluxo de Produtos", () => {
       quantidade: produto.quantidade,
     };
 
-    usuario = criarUsuarioNormal();
-    cy.cadastroApi(usuario.nome, usuario.email, usuario.senha, "false");
-    produtosApi.criarProduto(novoProduto).then((response) => {
-      expect(response.status).to.eq(401);
-    });
+    usuario = criarUsuario();
+    cy.cadastroApi(usuario.nome, usuario.email, usuario.senha)
+
+    .then(() => {
+      return cy.loginApi(usuario.email, usuario.senha)
+    })
+
+    .then((loginResponse) => {
+      Cypress.env("token", loginResponse.body.authorization);
+    })
+
+    .then(() => {
+      produtosApi.criarProduto(novoProduto).then((response) => {
+      expect(response.status).to.eq(403);
+      expect(response.body.message).to.eq("Rota exclusiva para administradores")
+      });
+    })
   });
 
   it("Deve falhar criação por token inválido", () => {
@@ -84,8 +100,8 @@ describe("Fluxo de Produtos", () => {
       descricao: produto.descricao,
       quantidade: produto.quantidade,
     };
-    const tokenValido = Cypress.env("token");
-    const tokenInvalido = `${tokenValido}INVALIDO`;
+    const tokenOriginal = Cypress.env("token");
+    const tokenInvalido = `${tokenOriginal}INVALIDO`;
 
     Cypress.env("token", tokenInvalido);
 
@@ -94,6 +110,10 @@ describe("Fluxo de Produtos", () => {
       expect(response.body.message).to.eq(
         "Token de acesso ausente, inválido, expirado ou usuário do token não existe mais"
       );
-    });
+    })
+
+    .then(() => {
+      Cypress.env("token", tokenOriginal)
+    })
   });
 });
