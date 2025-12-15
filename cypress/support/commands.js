@@ -1,9 +1,10 @@
 Cypress.Commands.add("cadastroValido", (nome, email, senha) => {
-  cy.get('[data-testid="cadastrar"]').click();
+  cy.intercept("GET", "/usuarios").as("requestLogin");
   cy.get('[data-testid="nome"]').type(nome);
   cy.get('[data-testid="email"]').type(email);
   cy.get('[data-testid="password"]').type(senha);
-  cy.get('[data-testid="cadastrar"]').click();
+  cy.get('[data-testid="cadastrar"]').click()
+  cy.wait("@requestLogin")
 });
 
 Cypress.Commands.add("login", (email, senha) => {
@@ -11,19 +12,19 @@ Cypress.Commands.add("login", (email, senha) => {
   cy.get('[data-testid="email"]').type(email);
   cy.get('[data-testid="senha"]').type(senha);
   cy.get('[data-testid="entrar"]').click();
-  cy.wait("@requestLogin").then((res) => {
-    const body = res.response.body;
+  // cy.wait("@requestLogin").then((res) => {
+  //   const body = res.response.body;
 
-    if (body.authorization) {
-      window.localStorage.setItem("token", body.authorization);
-      return "sucesso";
-    }
+  //   if (body.authorization) {
+  //     window.localStorage.setItem("token", body.authorization);
+  //     return "sucesso";
+  //   }
 
-    if (body.message && body.message.includes("Email e/ou senha inválidos")) {
-      return "inválido";
-    }
+  //   if (body.message && body.message.includes("Email e/ou senha inválidos")) {
+  //     return "inválido";
+  //   }
   });
-});
+
 
 Cypress.Commands.add("loginOuCadastra", (email, senha) => {
   cy.login(email, senha).then((response) => {

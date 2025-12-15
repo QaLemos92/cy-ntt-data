@@ -1,8 +1,8 @@
 import LoginPage from "../../support/pages/LoginPage";
 import CadastroPage from "../../support/pages/CadastroPage";
 import HomePage from "../../support/pages/HomePage";
-import HeaderPage from "../../support/pages/HeaderPage"
-import { criarUsuarioNormal } from "../../support/utils/geradorUsuario";
+import HeaderPage from "../../support/pages/HeaderPage";
+import { criarUsuario } from "../../support/utils/geradorUsuario";
 
 const loginPage = new LoginPage();
 const cadastroPage = new CadastroPage();
@@ -12,9 +12,8 @@ let usuario;
 
 describe("Pagina de login", () => {
   beforeEach(() => {
+    usuario = criarUsuario();
     cy.visit("/login");
-    cy.writeFile("cypress/fixtures/usuarios.json", criarUsuarioNormal());
-    usuario = criarUsuarioNormal();
   });
 
   it("Login com credenciais inválidas", () => {
@@ -33,7 +32,7 @@ describe("Pagina de login", () => {
     cadastroPage.clicarCadastrar();
 
     homePage.validarPaginaProdutos();
-    header.realizaLogout()
+    header.realizaLogout();
     loginPage.validarPaginaDeLogin();
   });
 });
