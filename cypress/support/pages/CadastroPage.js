@@ -2,9 +2,9 @@ class CadastroPage {
 
     elementos = {
         form: () => cy.get('.form'),
-        campo_nome: () => cy.get('#nome'),
-        campo_email: () => cy.get('#email'),
-        campo_senha: () => cy.get('#password'),
+        campo_nome: () => cy.get('[data-testid="nome"]'),
+        campo_email: () => cy.get('[data-testid="email"]'),
+        campo_senha: () => cy.get('[data-testid="password"]'),
         botao_cadastrar: () => cy.get('[data-testid="cadastrar"]'),
         alert: () => cy.get('.alert'),
     }

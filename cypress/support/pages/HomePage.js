@@ -3,16 +3,18 @@ class HomePage {
     titulo: () => cy.get("h1"),
     campo_pesquisa: () => cy.get('[data-testid="pesquisar"]'),
     botao_pesquisar: () => cy.get('[data-testid="botaoPesquisar"]'),
-    lista_produtos: () =>
-      cy.get("#root > div > div > div.container-fluid > div > section .card"),
-    botao_adicionarCarrinho: () => cy.get('[data-testid="adicionarNaLista"]'),
+    lista_produtos: () => cy.get("#root > div > div > div.container-fluid > div > section .card"),
+    botao_adicionarLista: () => cy.get('[data-testid="adicionarNaLista"]'),
     link_detalhesProduto: () => cy.get('[data-testid="product-detail-link"]'),
-    botao_deslogar: () => cy.get('[data-testid="logout"]'),
   };
 
   validarPaginaProdutos() {
     cy.url().should("include", "/home");
     this.elementos.titulo().should("contain", "Serverest Store");
+  }
+
+  validarPaginaAdmin(nome) {
+    this.elementos.titulo().should("contain", `Bem Vindo ${nome}`);
   }
 
   pesquisarProduto(produto) {
@@ -27,11 +29,11 @@ class HomePage {
     this.elementos.link_detalhesProduto().first().click();
   }
 
-  adicionarItemSelecionadoAoCarrinho() {
-    this.elementos.botao_adicionarCarrinho().first().click();
+  adicionarItemSelecionadoNaLista() {
+    this.elementos.botao_adicionarLista().first().click();
   }
 
-  adicionarItemAleatorioAoCarrinho() {
+  adicionarItemAleatorioNaLista() {
     cy.get(
       "#root > div > div > div.container-fluid > div > section .card"
     ).then(($cards) => {
@@ -39,15 +41,10 @@ class HomePage {
       const indexRandom = Math.floor(Math.random() * total);
 
       cy.wrap($cards[indexRandom]).as("produtoSelecionado");
+      cy.get("@produtoSelecionado")
+        .find('[data-testid="adicionarNaLista"]')
+        .click();
     });
-
-    cy.get("@produtoSelecionado")
-      .find('[data-testid="adicionarNaLista"]')
-      .click();
-  }
-
-  deslogarUsuario() {
-    this.elementos.botao_deslogar().click();
   }
 }
 

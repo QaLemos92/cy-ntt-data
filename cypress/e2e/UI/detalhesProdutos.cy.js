@@ -1,34 +1,33 @@
-import DetalhesDeProdutos from "../../pages/DetalhesDeProdutos";
-import LoginPage from "../../pages/LoginPage";
-import HomePage from "../../pages/HomePage";
+import DetalhesDeProdutos from "../../support/pages/DetalhesDeProdutos";
+import LoginPage from "../../support/pages/LoginPage";
+import HomePage from "../../support/pages/HomePage";
+import { criarUsuario } from "../../support/utils/geradorUsuario";
 
 const detalhesDeProdutos = new DetalhesDeProdutos();
 const loginPage = new LoginPage();
 const homePage = new HomePage();
 
-describe('Página de Detalhes dos Produtos', () => {
+describe("Página de Detalhes dos Produtos", () => {
+  let usuario;
 
-    const email = 'eduardo.anemolos@outlook.com';
-    const senha = '123456';
+  beforeEach(() => {
+    usuario = criarUsuario();
+    cy.visit("/cadastrarusuarios");
+
+    cy.cadastroValido(usuario.nome, usuario.email, usuario.senha);
     
-    beforeEach(() => {
-        cy.session('usuarioLogado', () => {
-            cy.visit('/login');
-            cy.loginOuCadastra('Eduardo Lemos', email, senha);
-        });
-        cy.visit('/home');
-        homePage.validarPaginaProdutos();
-    });
+    homePage.validarPaginaProdutos();
+  });
 
-    it('Deve visualizar os detalhes de um produto', () => {
-        homePage.verDetalhesDoProduto();
-        detalhesDeProdutos.validarPaginaDetalhesDoProduto();
-        detalhesDeProdutos.validarDetalhesDoProduto();
-    });
+  it("Deve visualizar os detalhes de um produto", () => {
+    homePage.verDetalhesDoProduto();
+    detalhesDeProdutos.validarPaginaDetalhesDoProduto();
+    detalhesDeProdutos.validarDetalhesDoProduto();
+  });
 
-    it('Deve voltar para a página de produtos a partir dos detalhes do produto', () => {
-        homePage.verDetalhesDoProduto();
-        detalhesDeProdutos.voltarParaPaginaDeProdutos();
-        homePage.validarPaginaProdutos();
-    });
+  it("Deve voltar para a página de produtos a partir dos detalhes do produto", () => {
+    homePage.verDetalhesDoProduto();
+    detalhesDeProdutos.voltarParaPaginaDeProdutos();
+    homePage.validarPaginaProdutos();
+  });
 });

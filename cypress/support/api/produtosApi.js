@@ -11,8 +11,21 @@ class ProdutosApi {
     });
   }
 
-  listarProdutos() {
-    return cy.request("GET", `${Cypress.env("baseApiUrl")}/produtos`);
+  buscarProdutoPorId(produtoId) {
+    return cy.request({
+      method: 'GET',
+      url: `${Cypress.env("baseApiUrl")}/produtos/${produtoId}`,
+    })
+  }
+     
+
+  listarProdutos(params = {}) {
+    return cy.request({
+      method: 'GET',
+      url: `${Cypress.env("baseApiUrl")}/produtos`,
+      qs: params,
+      failOnStatusCode: false
+    });
   }
 
   deletarProduto(produtoId) {
@@ -25,6 +38,8 @@ class ProdutosApi {
       failOnStatusCode: false,
     });
   }
+
+
 }
 
 export default new ProdutosApi();

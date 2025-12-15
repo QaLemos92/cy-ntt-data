@@ -1,32 +1,32 @@
 Cypress.Commands.add("cadastroValido", (nome, email, senha) => {
-  cy.get('[data-testid="cadastrar"]').click();
-  cy.get("#nome").type(nome || "Eduardo Lemos");
-  cy.get("#email").type(email || "eduardo.anemolos@outlook.com");
-  cy.get("#password").type(senha || "123456");
-  cy.get('[data-testid="cadastrar"]').click();
-  cy.visit("/login");
+  cy.intercept("GET", "/usuarios").as("requestLogin");
+  cy.get('[data-testid="nome"]').type(nome);
+  cy.get('[data-testid="email"]').type(email);
+  cy.get('[data-testid="password"]').type(senha);
+  cy.get('[data-testid="cadastrar"]').click()
+  cy.wait("@requestLogin")
 });
 
-Cypress.Commands.add("login", (username, password) => {
+Cypress.Commands.add("login", (email, senha) => {
   cy.intercept("POST", "/login").as("requestLogin");
-  cy.get('[data-testid="email"]').type(username);
-  cy.get('[data-testid="senha"]').type(password);
+  cy.get('[data-testid="email"]').type(email);
+  cy.get('[data-testid="senha"]').type(senha);
   cy.get('[data-testid="entrar"]').click();
-  cy.wait("@requestLogin").then((res) => {
-    const body = res.response.body;
+  // cy.wait("@requestLogin").then((res) => {
+  //   const body = res.response.body;
 
-    if (body.authorization) {
-      window.localStorage.setItem("token", body.authorization);
-      return "sucesso";
-    }
+  //   if (body.authorization) {
+  //     window.localStorage.setItem("token", body.authorization);
+  //     return "sucesso";
+  //   }
 
-    if (body.message && body.message.includes("Email e/ou senha inválidos")) {
-      return "inválido";
-    }
+  //   if (body.message && body.message.includes("Email e/ou senha inválidos")) {
+  //     return "inválido";
+  //   }
   });
-});
 
-Cypress.Commands.add("loginOuCadastra", (nome, email, senha) => {
+
+Cypress.Commands.add("loginOuCadastra", (email, senha) => {
   cy.login(email, senha).then((response) => {
     if (response === "sucesso") {
       return;
@@ -39,6 +39,12 @@ Cypress.Commands.add("loginOuCadastra", (nome, email, senha) => {
   });
 });
 
+Cypress.Commands.add("loginAdmin", (email, senha) => {
+  cy.get('[data-testid="email"]').type(email);
+  cy.get('[data-testid="senha"]').type(senha);
+  cy.get('[data-testid="entrar"]').click();
+});
+
 Cypress.Commands.add("loginApi", (email, password) => {
   cy.request({
     method: "POST",
@@ -48,11 +54,20 @@ Cypress.Commands.add("loginApi", (email, password) => {
       password: password,
     },
     failOnStatusCode: false,
-  }).then((response) => {
-    expect(response.status).to.eq(200);
-    expect(response.body).to.have.property("authorization");
-    const token = response.body.authorization;
-    Cypress.env("token", token);
-    cy.log(token);
   });
 });
+
+Cypress.Commands.add("cadastroApi", (nome, email, password, administrador = "false") => {
+  cy.request({
+    method: "POST",
+    url: `${Cypress.env("baseApiUrl")}/usuarios`,
+    body: {
+      nome,
+      email,
+      password,
+      administrador,
+    },
+    failOnStatusCode: false,
+  });
+});
+
