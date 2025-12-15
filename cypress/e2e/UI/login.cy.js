@@ -24,7 +24,7 @@ describe("Pagina de login", () => {
     loginPage.verificarAlerta("Email e/ou senha inválidos");
   });
 
-  it.only("Cadastra novo usuário com sucesso - realiza login - desloga", () => {
+  it("Cadastra novo usuário com sucesso - realiza login - desloga", () => {
     cadastroPage.acessarCadastro();
     cadastroPage.validarPaginaDeCadastro();
     cadastroPage.preencherNome(usuario.nome);

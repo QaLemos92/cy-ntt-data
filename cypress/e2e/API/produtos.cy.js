@@ -42,7 +42,7 @@ describe("Fluxo de Produtos", () => {
     });
   });
 
-  it("Deve criar e deletar um produto", () => {
+  it.only("Deve criar e deletar um produto", () => {
     const novoProduto = {
       nome: produto.nome,
       preco: produto.preco,

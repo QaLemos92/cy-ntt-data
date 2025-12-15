@@ -11,6 +11,14 @@ class ProdutosApi {
     });
   }
 
+  buscarProdutoPorId(produtoId) {
+    return cy.request({
+      method: 'GET',
+      url: `${Cypress.env("baseApiUrl")}/produtos/${produtoId}`,
+    })
+  }
+     
+
   listarProdutos(params = {}) {
     return cy.request({
       method: 'GET',
@@ -30,6 +38,8 @@ class ProdutosApi {
       failOnStatusCode: false,
     });
   }
+
+
 }
 
 export default new ProdutosApi();
