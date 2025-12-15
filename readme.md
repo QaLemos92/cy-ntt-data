@@ -9,25 +9,45 @@ Os testes foram criados para validar funcionalidades do ambiente público **Serv
 
 ### UI (E2E)
 
-- Teste de login.  
-- Teste de busca de produtos.  
-- Teste de adição de um produto aleatório ao carrinho.  
+- Fluxo de cadastro e login de usuário.
+- Validação da página de listagem de produtos.
+- Pesquisa de produtos por termo.
+- Visualização de detalhes do produto.
+- Adição de produto aleatório à lista de compras.
+- Ajuste de quantidade de itens.
+- Adição de itens ao carrinho.
+- Logout do usuário.  
 
 ### API
 
-- Testes de criação e exclusão de usuários.
-- Testes de criação e exclusão de produtos.
-- Testes de criação e exclusão de carrinho.   
+#### Usuários
+- Criação de usuário com sucesso.
+- Validação de erro ao tentar cadastrar usuário com e-mail já existente.
+- Validação de regras de autenticação.
 
+#### Produtos
+- Criação e exclusão de produtos (usuário administrador).
+- Validação de erro ao criar produto sem autenticação.
+- Validação de erro ao criar produto com token inválido.
+- Validação de restrição de criação por usuário não administrador.
+
+#### Carrinho
+- Criação de carrinho vinculada ao usuário autenticado.
+- Validação da redução de estoque ao adicionar produtos ao carrinho.
+- Cancelamento de compra com reabastecimento do estoque.
+- Validação de acesso negado sem autenticação.
+- Validação de isolamento de carrinho entre usuários.
 ---
 
-## Arquitetura
+## Arquitetura e Boas Práticas
 
-- Page Object Model aplicado em UI e API.  
-- Organização modular para endpoints em `/support/api`.    
-- Configurações separadas:
-  - `baseUrl` para testes UI  
-  - `baseApiUrl` para testes de API  
+- Arquitetura **Page Object Model (POM)** aplicada para:
+  - UI (`/support/pages`)
+  - API (`/support/api`)
+- Separação clara de responsabilidades por domínio (usuário, produto, carrinho).
+- Uso de **commands customizados** para autenticação e setup de dados.
+- Geradores de dados dinâmicos para evitar conflitos entre execuções.
+- Testes independentes e estáveis, sem dependência entre cenários.  
 
 ---
 
