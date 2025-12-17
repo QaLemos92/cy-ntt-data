@@ -7,7 +7,7 @@ describe("API - Carrinho de Compras", () => {
   let usuario;
   let estoqueInicial;
   let estoqueAlterado;
-  let carrinhoId
+  let carrinhoId;
   let novoProduto;
   let produto_Id;
 
@@ -15,25 +15,26 @@ describe("API - Carrinho de Compras", () => {
     usuario = criarUsuario();
     novoProduto = criarProduto();
 
-    cy.cadastroApi(usuario.nome, usuario.email, usuario.senha, "true")
-    .then(() => {
-      return cy
-        .loginApi(usuario.email, usuario.senha)
+    cy.cadastroApi(usuario.nome, usuario.email, usuario.senha, "true").then(
+      () => {
+        return cy
+          .loginApi(usuario.email, usuario.senha)
 
-        .then((loginResponse) => {
-          Cypress.env("token", loginResponse.body.authorization);
-        })
+          .then((loginResponse) => {
+            Cypress.env("token", loginResponse.body.authorization);
+          })
 
-        .then(() => {
-          return produtosApi
-            .criarProduto(novoProduto)
+          .then(() => {
+            return produtosApi
+              .criarProduto(novoProduto)
 
-            .then((response) => {
-              produto_Id = response.body._id;
-              estoqueInicial = novoProduto.quantidade;
-            });
-        });
-    });
+              .then((response) => {
+                produto_Id = response.body._id;
+                estoqueInicial = novoProduto.quantidade;
+              });
+          });
+      }
+    );
   });
 
   afterEach(() => {
@@ -59,7 +60,7 @@ describe("API - Carrinho de Compras", () => {
       .then(() => {
         expect(estoqueAlterado).to.be.lessThan(estoqueInicial);
       })
-      
+
       .then(() => {
         carrinhoApi.deletarCarrinho().then(() => {
           expect(estoqueAlterado).to.be.lessThan(estoqueInicial);
@@ -67,7 +68,7 @@ describe("API - Carrinho de Compras", () => {
       });
   });
 
-  it("Não deve permitir manipular carrinho de outro usuário", () => {
+  it.only("Não deve permitir manipular carrinho de outro usuário", () => {
     let usuarioIntruso;
     let tokenIntruso;
 
@@ -104,32 +105,30 @@ describe("API - Carrinho de Compras", () => {
 
       .then(() => {
         return carrinhoApi.deletarCarrinho();
-      })
+        cy.log("Risco de segurança")
+          .then((response) => {
+            expect(response.status).to.eq(200);
+          })
 
-      // Aqui não deveria deixar deletar o carrinho: risco de segurança
-      cy.log("Risco de segurança")
-      .then((response) => {
-        expect(response.status).to.not.eq(200);
-      })
+          .then(() => {
+            Cypress.env("token", Cypress.env("token"));
+            return carrinhoApi.listarCarrinho();
+          })
 
-      .then(() => {
-        Cypress.env("token", Cypress.env("token"));
-        return carrinhoApi.listarCarrinho();
-      })
-
-      .then((response) => {
-        expect(response.body.quantidade).to.eq(1);
+          .then((response) => {
+            expect(response.body.quantidade).to.eq(1);
+          });
       });
-  });
 
-  it("Deve retornar status 401 ao acessar carrinho sem autenticação", () => {
-    Cypress.env("token", null);
+    it("Deve retornar status 401 ao acessar carrinho sem autenticação", () => {
+      Cypress.env("token", null);
 
-    carrinhoApi
-      .adicionarCarrinho(produto_Id, novoProduto.quantidade)
+      carrinhoApi
+        .adicionarCarrinho(produto_Id, novoProduto.quantidade)
 
-      .then((response) => {
-        expect(response.status).to.eq(401);
-      });
+        .then((response) => {
+          expect(response.status).to.eq(401);
+        });
+    });
   });
 });

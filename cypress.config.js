@@ -5,20 +5,20 @@ module.exports = defineConfig({
     runMode: 2,
     openMode: 0,
   },
-  e2e: {
-    baseUrl: "https://front.serverest.dev",
-    env: {
-      baseApiUrl: "https://serverest.dev",
-    },
-    setupNodeEvents(on, config) {
-      // implement node event listeners here
-    },
-  },
   reporter: "mochawesome",
   reporterOptions: {
     reportDir: "cypress/results",
     overwrite: false,
     html: false,
     json: true,
+  },
+  e2e: {
+    baseUrl: "https://front.serverest.dev",
+    env: {
+      baseApiUrl: "https://serverest.dev",
+    },
+    setupNodeEvents(on, config) {
+      return config;
+    },
   },
 });
