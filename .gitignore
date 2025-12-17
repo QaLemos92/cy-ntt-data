@@ -139,4 +139,5 @@ vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
 
 # Temporary folders
-e2e/.screenshots/
+cypress/screenshots/
+cypress/results/
